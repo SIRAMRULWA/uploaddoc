@@ -13,11 +13,13 @@ import androidx.compose.ui.tooling.preview.Preview
 @Composable
 fun DocumentUploadScreen() {
     var selectedDocumentUri by remember { mutableStateOf<Uri?>(null) }
+    var isDocumentSelected by remember { mutableStateOf(false) }
 
     val documentLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent(),
         onResult = { uri: Uri? ->
             selectedDocumentUri = uri
+            isDocumentSelected = true
         }
     )
 
@@ -31,11 +33,11 @@ fun DocumentUploadScreen() {
                 documentLauncher.launch("application/pdf") // You can specify the MIME type of the document here
             }
         ) {
-            Text("Select Document")
+            Text("Upload Document")
         }
 
-        selectedDocumentUri?.let { uri ->
-            Text("Selected Document: ${uri.lastPathSegment}")
+        if (isDocumentSelected) {
+            Text("Selected Document: ${selectedDocumentUri?.lastPathSegment}")
 
             // Here, you can handle the selected document as needed (e.g., read content, upload, etc.).
         }
